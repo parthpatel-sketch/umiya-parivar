@@ -1,0 +1,5 @@
+# Existing ignores
+node_modules/
+.env
+
+
