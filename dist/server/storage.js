@@ -102,7 +102,7 @@ export class MemStorage {
             {
                 id: "img-5",
                 title: "Temple Aerial View",
-                src: "/umiya/umiya5d.jpg",
+                src: "/umiya/mahadev.jpg",
                 category: "Architecture",
                 description: "Aerial perspective showcasing the temple's grand architecture.",
                 createdAt: new Date()

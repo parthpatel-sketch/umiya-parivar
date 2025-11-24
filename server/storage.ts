@@ -5,8 +5,8 @@
     type InsertEvent,
     type GalleryImage,
     type InsertGalleryImage,
-    type ContactMessage,
-    type InsertContactMessage
+    // type ContactMessage,
+    // type InsertContactMessage
   } from "@shared/schema";
   import { randomUUID } from "crypto";
 
@@ -33,24 +33,24 @@
     updateGalleryImage(id: string, image: Partial<InsertGalleryImage>): Promise<GalleryImage | undefined>;
     deleteGalleryImage(id: string): Promise<boolean>;
     
-    // Contact Messages
-    getAllContactMessages(): Promise<ContactMessage[]>;
-    getContactMessage(id: string): Promise<ContactMessage | undefined>;
-    createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
-    deleteContactMessage(id: string): Promise<boolean>;
+    // // Contact Messages
+    // getAllContactMessages(): Promise<ContactMessage[]>;
+    // getContactMessage(id: string): Promise<ContactMessage | undefined>;
+    // createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
+    // deleteContactMessage(id: string): Promise<boolean>;
   }
 
   export class MemStorage implements IStorage {
     private users: Map<string, User>;
     private events: Map<string, Event>;
     private galleryImages: Map<string, GalleryImage>;
-    private contactMessages: Map<string, ContactMessage>;
+    // private contactMessages: Map<string, ContactMessage>;
 
     constructor() {
       this.users = new Map();
       this.events = new Map();
       this.galleryImages = new Map();
-      this.contactMessages = new Map();
+      // this.contactMessages = new Map();
       
       // Initialize with some sample data
       this.initializeSampleData();
@@ -98,8 +98,8 @@
       const sampleGalleryImages: GalleryImage[] = [
      {
     id: "img-1",
-    title: "Umiya Maa Idol - Front View",
-    src: "/umiya/umiya1.jpg",
+    title: "Umiya Maa Idol Decorated",
+    src: "/umiya/bguma.jpg",
     category: "Interior",
     description: "The divine idol of Maa Umiya adorned in traditional attire.",
     createdAt: new Date()
@@ -136,14 +136,14 @@
   //   description: "Maa Umiya beautifully decorated during the festive season.",
   //   createdAt: new Date()
   // },
-  // {
-  //   id: "img-4",
-  //   title: "Divine Blessings",
-  //   src: "/umiya/umiya4.jpg",
-  //   category: "Interior",
-  //   description: "A closer glimpse of the goddess radiating divine energy.",
-  //   createdAt: new Date()
-  // },
+  {
+    id: "img-4",
+    title: "Divine Blessings",
+    src: "/umiya/mahadev.jpg",
+    category: "Interior",
+    description: "A closer glimpse of the goddess radiating divine energy.",
+    createdAt: new Date()
+  },
   {
     id: "img-5",
     title: "Temple Aerial View",
@@ -194,28 +194,28 @@
   },
   {
     id: "img-11",
-    title: "Divine Setup",
+    title: "Radhe Krishna",
     src: "/umiya/umiyak11.jpg",
     category: "Interior",
-    description: "A beautiful altar setup featuring the goddess with devotion.",
+    description: "A beauty of radhe krishna .",
     createdAt: new Date()
   },
   {
     id: "img-12",
-    title: "Umiya Maa Idol Decorated",
-    src: "/umiya/umiya12.jpg",
+    title: "Umiya Maa Idol - Front View ",
+    src: "/umiya/umiya13.jpg",
     category: "Festivals",
     description: "Maa Umiya beautifully decorated for a religious ceremony.",
     createdAt: new Date()
   },
-  {
-    id: "img-13",
-    title: "Sacred Idol in Sanctum",
-    src: "/umiya/umiya13.jpg",
-    category: "Interior",
-    description: "An image capturing the peaceful aura of the sanctum.",
-    createdAt: new Date()
-  },
+  // {
+  //   id: "img-13",
+  //   title: "Sacred Idol in Sanctum",
+  //   src: "/umiya/umiya13.jpg",
+  //   category: "Interior",
+  //   description: "An image capturing the peaceful aura of the sanctum.",
+  //   createdAt: new Date()
+  // },
  
   
       ];
@@ -235,12 +235,19 @@
       );
     }
 
-    async createUser(insertUser: InsertUser): Promise<User> {
-      const id = randomUUID();
-      const user: User = { ...insertUser, id };
-      this.users.set(id, user);
-      return user;
-    }
+   async createUser(insertUser: InsertUser): Promise<User> {
+  const id = randomUUID();
+
+  const user: User = {
+    id,
+    username: insertUser.username,
+    password: insertUser.password,
+  };
+
+  this.users.set(id, user);
+  return user;
+}
+
 
     // Events
     async getAllEvents(): Promise<Event[]> {
@@ -253,30 +260,47 @@
       return this.events.get(id);
     }
 
-    async createEvent(insertEvent: InsertEvent): Promise<Event> {
-      const id = randomUUID();
-      const event: Event = {
-        ...insertEvent,
+ async createEvent(insertEvent: InsertEvent): Promise<Event> {
+    const id = randomUUID();
+    
+    // FIX: Explicitly assign required properties that might be missing (optional) in InsertEvent
+    const event: Event = {
+        // Required properties from Event type must be explicitly guaranteed
+        date: insertEvent.date || '',          // Provide default if missing
+        description: insertEvent.description || '',
+        title: insertEvent.title || 'Untitled Event',
+        time: insertEvent.time || 'TBD',
+        category: insertEvent.category || 'General',
+        image: insertEvent.image || '/default/image.jpg',
+
+        // Properties that are present in both/handled separately
         id,
-        attendees: insertEvent.attendees ?? 0,
-        createdAt: new Date()
-      };
-      this.events.set(id, event);
-      return event;
-    }
+        // The previous fix for 'unknown' type on attendees
+        attendees: (insertEvent.attendees as number) ?? 0,
+        createdAt: new Date(),
+        
+        // Use spread for any other properties or to ensure all properties from 
+        // insertEvent are included, though explicitly listing the required ones is safer.
+        // ...insertEvent 
+    };
 
-    async updateEvent(id: string, updateData: Partial<InsertEvent>): Promise<Event | undefined> {
-      const existingEvent = this.events.get(id);
-      if (!existingEvent) return undefined;
+    this.events.set(id, event);
+    return event;
+}
 
-      const updatedEvent: Event = {
-        ...existingEvent,
-        ...updateData
-      };
-      this.events.set(id, updatedEvent);
-      return updatedEvent;
-    }
+   // Corrected Code (No more error)
+async updateEvent(id: string, updateData: Partial<InsertEvent>): Promise<Event | undefined> {
+  const existingEvent = this.events.get(id);
+  if (!existingEvent) return undefined;
 
+  const updatedEvent: Event = {
+    ...existingEvent,
+    ...updateData
+  } as Event; // <-- THIS IS THE ONLY CHANGE I MADE
+  
+  this.events.set(id, updatedEvent);
+  return updatedEvent;
+}
     async deleteEvent(id: string): Promise<boolean> {
       return this.events.delete(id);
     }
@@ -292,16 +316,22 @@
       return this.galleryImages.get(id);
     }
 
-    async createGalleryImage(insertImage: InsertGalleryImage): Promise<GalleryImage> {
-      const id = randomUUID();
-      const image: GalleryImage = {
-        ...insertImage,
-        id,
-        createdAt: new Date()
-      };
-      this.galleryImages.set(id, image);
-      return image;
-    }
+   async createGalleryImage(insertImage: InsertGalleryImage): Promise<GalleryImage> {
+  const id = randomUUID();
+
+  const image: GalleryImage = {
+    id,
+    createdAt: new Date(),
+    title: insertImage.title,
+    description: insertImage.description,
+    category: insertImage.category,
+    src: insertImage.src,
+  };
+
+  this.galleryImages.set(id, image);
+  return image;
+}
+
 
     async updateGalleryImage(id: string, updateData: Partial<InsertGalleryImage>): Promise<GalleryImage | undefined> {
       const existingImage = this.galleryImages.get(id);
@@ -320,31 +350,31 @@
     }
 
     // Contact Messages
-    async getAllContactMessages(): Promise<ContactMessage[]> {
-      return Array.from(this.contactMessages.values()).sort((a, b) => 
-        b.createdAt!.getTime() - a.createdAt!.getTime()
-      );
-    }
+    // async getAllContactMessages(): Promise<ContactMessage[]> {
+    //   return Array.from(this.contactMessages.values()).sort((a, b) => 
+    //     b.createdAt!.getTime() - a.createdAt!.getTime()
+    //   );
+    // }
 
-    async getContactMessage(id: string): Promise<ContactMessage | undefined> {
-      return this.contactMessages.get(id);
-    }
+    // async getContactMessage(id: string): Promise<ContactMessage | undefined> {
+    //   return this.contactMessages.get(id);
+    // }
 
-    async createContactMessage(insertMessage: InsertContactMessage): Promise<ContactMessage> {
-      const id = randomUUID();
-      const message: ContactMessage = {
-        ...insertMessage,
-        id,
-        phone: insertMessage.phone ?? null,
-        createdAt: new Date()
-      };
-      this.contactMessages.set(id, message);
-      return message;
-    }
+    // async createContactMessage(insertMessage: InsertContactMessage): Promise<ContactMessage> {
+    //   const id = randomUUID();
+    //   const message: ContactMessage = {
+    //     ...insertMessage,
+    //     id,
+    //     phone: insertMessage.phone ?? null,
+    //     createdAt: new Date()
+    //   };
+    //   this.contactMessages.set(id, message);
+    //   return message;
+    // }
 
-    async deleteContactMessage(id: string): Promise<boolean> {
-      return this.contactMessages.delete(id);
-    }
+    // async deleteContactMessage(id: string): Promise<boolean> {
+    //   return this.contactMessages.delete(id);
+    // }
   }
 
   export const storage = new MemStorage();

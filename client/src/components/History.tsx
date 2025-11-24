@@ -1,9 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, Crown, Star, Building } from "lucide-react"
-import historyImage from "@assets/client\public\videos\history.jpg"
+// import historyImage from "@umiya/bguma.jpg" 
 
-const historicalEvents = [
+const historicalEvents = [ 
   {
     year: "1986",
     title: "Temple Foundation",
@@ -93,9 +93,9 @@ export function History() {
 
           <div>
             <img 
-              src={"/videos/history.jpg"} 
+              src={"/umiya/umagold.jpg"}
               alt="Temple Architectural Details" 
-              className="rounded-lg shadow-lg w-full h-full mb-6"
+              className="rounded-lg shadow-lg w-full h-auto mb-6"
             />
             <p className="text-sm text-muted-foreground text-center italic">
               Intricate architectural details showcasing traditional Hindu temple craftsmanship

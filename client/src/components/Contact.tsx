@@ -127,7 +127,12 @@ export function Contact() {
             </div>
 
             {/* Location Card */}
-            <Card>
+           
+          </div>
+
+          {/* Right: Contact Form */}
+          <div>
+ <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Navigation className="h-5 w-5" />
@@ -138,13 +143,14 @@ export function Contact() {
                 <div
                   className="rounded-lg h-64 bg-cover bg-center"
                   style={{
-                    backgroundImage: `url('/videos/map.jpg')` // ✅ update this path
+                    backgroundImage: `url('/videos/map.png')` // ✅ update this path
                   }}
                 >
-                  <div className="bg-black/40 text-center text-white h-full flex flex-col items-center justify-center rounded-lg">
-                    <MapPin className="h-10 w-10 mb-3" />
-                    <p className="font-medium">Interactive Map</p>
-                    <p className="text-sm">
+                  <div className="bg-black/40 text-center text-white h-full flex flex-col   items-center justify-center rounded-lg">
+                    <MapPin className="h-10 w-10 mb-3 text-black"  />
+                    <p className="font-medium text-black">Interactive Map</p>
+                    <br />
+                    <p className="text-md text-black">
                       Click below to open directions in your map app
                     </p>
                   </div>
@@ -160,11 +166,8 @@ export function Contact() {
                 </a>
               </CardContent>
             </Card>
-          </div>
-
-          {/* Right: Contact Form */}
-          <div>
-            <Card>
+            
+            {/* <Card>
               <CardHeader>
                 <CardTitle>Send us a Message</CardTitle>
               </CardHeader>
@@ -226,8 +229,12 @@ export function Contact() {
                   </Button>
                 </form>
               </CardContent>
-            </Card>
+            </Card> */}
 
+
+
+
+{/* 
             <div className="mt-8 text-center">
               <h4 className="font-serif text-lg font-semibold mb-4">Emergency Contact</h4>
               <p className="text-muted-foreground mb-2">
@@ -237,7 +244,7 @@ export function Contact() {
                 <Phone className="h-4 w-4 mr-2" />
                 (+91) 94263 84407
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

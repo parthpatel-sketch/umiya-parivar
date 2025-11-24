@@ -67,17 +67,17 @@
 //     </section>
 //   )
 // }
+
 import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "../components/ui/button" 
 import { Calendar, Clock, MapPin } from "lucide-react"
-import templeExteriorImage from "@assets/generated_images/Hindu_temple_exterior_view_998b9df4.png"
+
 
 export function Hero() {
   const [showHero, setShowHero] = useState(false)
   const [fadeOut, setFadeOut] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-
-  useEffect(() => {
+useEffect(() => {
     const video = videoRef.current
     if (video) {
       // Fade out when video ends
@@ -96,9 +96,14 @@ export function Hero() {
     }
   }, [])
 useEffect(() => {
+  if (window.innerWidth < 640) { // Tailwind's "sm" breakpoint
+    setShowHero(true);
+    return;
+  }
   // Check if intro has already played
   const hasPlayed = sessionStorage.getItem("introPlayed");
 
+  
   if (hasPlayed) {
     setShowHero(true); // Skip intro
     return;
@@ -125,9 +130,8 @@ useEffect(() => {
     return () => clearTimeout(timer);
   }
 }, []);
-
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-black">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-black">
       {/* Intro Video */}
       {!showHero && (
         <div
@@ -142,20 +146,25 @@ useEffect(() => {
             muted
             playsInline
             preload="auto"
-            poster="/images/temple-poster.jpg" // fallback while loading
-            className="w-full h-full object-cover"
+            poster="/videos/hero.jpg" // fallback while loading
+            className="w-full h-full  object-cover  "
           />
           <div className="absolute inset-0 bg-black/20" />
         </div>
       )}
 
       {/* Background Image */}
-      <div
-        className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ${
-          showHero ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ backgroundImage: `url(${"/videos/hero.jpg"})` }}
-      >
+    <div
+  className={`absolute inset-0 bg-cover bg-no-repeat transition-opacity duration-1000 ${
+    showHero ? "opacity-100" : "opacity-0"
+  } bg-[center_75%] sm:bg-[center_75%] md:bg-[center_80%] lg:bg-center `}
+  style={{
+    backgroundImage: `url(${"/videos/hero.jpg"})`,
+    backgroundSize: "cover", 
+     backgroundPosition: "35%",
+  }}
+>
+
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40" />
       </div>
 
@@ -165,13 +174,13 @@ useEffect(() => {
           showHero ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
-        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-black dark:text-white">
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-[#c36c2d] dark:text-[#F5DEB3]">
           શ્રી ઉમિયા માતા મંદિર
         </h1>
-        <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold mb-4 text-black/90 dark:text-white/90">
+        <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold mb-4 text-white/90 dark:text-white/90">
           Hindu Umiya Maa Temple
         </h2>
-        <p className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-black/70 dark:text-white/70">
+        <p className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-[#e7ddd8] dark:text-white/70">
           Experience divine blessings and spiritual peace in our sacred sanctuary. 
           Join our community in worship, celebration, and cultural heritage.
         </p>
@@ -192,15 +201,20 @@ useEffect(() => {
       Visit Temple
     </Button>
   </a>
-
+ <a
+    href="live" // Replace with actual temple address or Maps link
+    target="_blank"
+    rel="noopener noreferrer"
+  >
   <Button
     size="lg"
     variant="outline"
-    className="bg-background/20 hover:bg-background/30 text-white border-white/50 backdrop-blur-sm"
+    className="bg-background/20 hover:bg-background/30 text-white border-white/50 backdrop-blur-sm "
   >
-    <Calendar className="mr-2 h-5 w-5" />
-    Upcoming Events
+    <Calendar className="mr-2 h-0 w-5" />
+  Live Stream 
   </Button>
+  </a>
 </div>
 
 

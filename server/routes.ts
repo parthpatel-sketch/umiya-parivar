@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEventSchema, insertGalleryImageSchema, insertContactMessageSchema } from "@shared/schema";
+import { insertEventSchema, insertGalleryImageSchema,} from "@shared/schema";
+// import { insertEventSchema, insertGalleryImageSchema, insertContactMessageSchema } from "@shared/schema"; original
 
 export async function registerRoutes(app: Express): Promise<Server> {
     // Events endpoints
@@ -129,52 +130,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Contact messages endpoints
-  app.get("/api/contact-messages", async (req, res) => {
-    try {
-      const messages = await storage.getAllContactMessages();
-      res.json(messages);
-    } catch (error) {
-      console.error("Error fetching contact messages:", error);
-      res.status(500).json({ error: "Failed to fetch contact messages" });
-    }
-  });
+  // app.get("/api/contact-messages", async (req, res) => {
+  //   try {
+  //     const messages = await storage.getAllContactMessages();
+  //     res.json(messages);
+  //   } catch (error) {
+  //     console.error("Error fetching contact messages:", error);
+  //     res.status(500).json({ error: "Failed to fetch contact messages" });
+  //   }
+  // });
 
-  app.get("/api/contact-messages/:id", async (req, res) => {
-    try {
-      const message = await storage.getContactMessage(req.params.id);
-      if (!message) {
-        return res.status(404).json({ error: "Message not found" });
-      }
-      res.json(message);
-    } catch (error) {
-      console.error("Error fetching contact message:", error);
-      res.status(500).json({ error: "Failed to fetch contact message" });
-    }
-  });
+  // app.get("/api/contact-messages/:id", async (req, res) => {
+  //   try {
+  //     const message = await storage.getContactMessage(req.params.id);
+  //     if (!message) {
+  //       return res.status(404).json({ error: "Message not found" });
+  //     }
+  //     res.json(message);
+  //   } catch (error) {
+  //     console.error("Error fetching contact message:", error);
+  //     res.status(500).json({ error: "Failed to fetch contact message" });
+  //   }
+  // });
 
-  app.post("/api/contact-messages", async (req, res) => {
-    try {
-      const validatedData = insertContactMessageSchema.parse(req.body);
-      const message = await storage.createContactMessage(validatedData);
-      res.status(201).json(message);
-    } catch (error) {
-      console.error("Error creating contact message:", error);
-      res.status(400).json({ error: "Failed to create contact message" });
-    }
-  });
+  // app.post("/api/contact-messages", async (req, res) => {
+  //   try {
+  //     const validatedData = insertContactMessageSchema.parse(req.body);
+  //     const message = await storage.createContactMessage(validatedData);
+  //     res.status(201).json(message);
+  //   } catch (error) {
+  //     console.error("Error creating contact message:", error);
+  //     res.status(400).json({ error: "Failed to create contact message" });
+  //   }
+  // });
 
-  app.delete("/api/contact-messages/:id", async (req, res) => {
-    try {
-      const success = await storage.deleteContactMessage(req.params.id);
-      if (!success) {
-        return res.status(404).json({ error: "Message not found" });
-      }
-      res.status(204).send();
-    } catch (error) {
-      console.error("Error deleting contact message:", error);
-      res.status(500).json({ error: "Failed to delete contact message" });
-    }
-  });
+  // app.delete("/api/contact-messages/:id", async (req, res) => {
+  //   try {
+  //     const success = await storage.deleteContactMessage(req.params.id);
+  //     if (!success) {
+  //       return res.status(404).json({ error: "Message not found" });
+  //     }
+  //     res.status(204).send();
+  //   } catch (error) {
+  //     console.error("Error deleting contact message:", error);
+  //     res.status(500).json({ error: "Failed to delete contact message" });
+  //   }
+  // });
 
   const httpServer = createServer(app);
 

@@ -80,7 +80,7 @@ export function Events() {
                   </div>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <MapPin className="h-4 w-4 mr-2" />
-                    Temple Main Hall
+                    Temple 
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">{event.description}</p>

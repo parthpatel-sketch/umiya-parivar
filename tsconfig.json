@@ -1,69 +1,69 @@
 // {
+//   "compilerOptions": {
+//     "outDir": "dist",
+//     "module": "ESNext",
+//     "target": "ES2020",
+//     "moduleResolution": "node",
+//     "esModuleInterop": true,
+//     "strict": true,
+//     "skipLibCheck": true,
+//     "baseUrl": ".",
+//     "paths": {
+//       "@shared/*": ["shared/schema.ts"]
+//     }
+//   },  
+//   "include": ["server/**/*", "shared/**/*"],
+//   "exclude": [
+//     "node_modules",
+//     "client",
+//     "dist"
+//   ]
+// }
+// {
 //   "include": ["client/src/**/*", "shared/**/*", "server/**/*"],
 //   "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
 //   "compilerOptions": {
 //     "incremental": true,
-//     "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
 //     "noEmit": true,
+//     "target": "ESNext",
 //     "module": "ESNext",
-//     "strict": true,
-//     "lib": ["esnext", "dom", "dom.iterable"],
-//     "jsx": "preserve",
+//     "lib": ["ESNext", "DOM", "DOM.Iterable"],
+//     "jsx": "react-jsx",
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
 //     "esModuleInterop": true,
 //     "skipLibCheck": true,
-//     "allowImportingTsExtensions": true,
-//     "moduleResolution": "bundler",
+//     "strict": true,
 //     "baseUrl": ".",
-//     "types": ["node", "vite/client"],
+//     "allowSyntheticDefaultImports": true,
+//     "types": ["vite/client", "node"],
 //     "paths": {
 //       "@/*": ["./client/src/*"],
 //       "@shared/*": ["./shared/*"]
 //     }
 //   }
 // }
-// {
-//   "compilerOptions": {
-//     "outDir": "dist",
-//     "module": "ESNext",
-//     "target": "ES2020",
-//     "moduleResolution": "node",
-//     "esModuleInterop": true,
-//     "strict": true
-//   },
-//   "include": ["server/**/*", "shared/**/*"]
-// }
-// {
-//   "compilerOptions": {
-//     "outDir": "dist",
-//     "module": "ESNext",
-//     "target": "ES2020",
-//     "moduleResolution": "node",
-//     "esModuleInterop": true,
-//     "strict": true,
-//     "baseUrl": ".", 
-//     "paths": {
-//       "@shared/*": ["shared/*"]
-//     }
-//   },
-//   "include": ["server/**/*", "shared/**/*"]
-// }
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "target": "ES2020",
     "module": "ESNext",
-    "target": "ESNext",
     "moduleResolution": "bundler",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["./shared/*"],
+      "@/*": ["./client/src/*"]
     },
-    "types": ["node"]
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "resolveJsonModule": true,
+    "noEmit": true
   },
-  "include": ["server/**/*", "shared/**/*"]
+  "include": [
+    "server",
+    "client/src",
+    "shared"
+  ]
 }

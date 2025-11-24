@@ -8,15 +8,11 @@ import { createServer } from "http";
 // server/storage.ts
 import { randomUUID } from "crypto";
 var MemStorage = class {
-  users;
-  events;
-  galleryImages;
-  contactMessages;
+  // private contactMessages: Map<string, ContactMessage>;
   constructor() {
     this.users = /* @__PURE__ */ new Map();
     this.events = /* @__PURE__ */ new Map();
     this.galleryImages = /* @__PURE__ */ new Map();
-    this.contactMessages = /* @__PURE__ */ new Map();
     this.initializeSampleData();
   }
   initializeSampleData() {
@@ -58,8 +54,8 @@ var MemStorage = class {
     const sampleGalleryImages = [
       {
         id: "img-1",
-        title: "Umiya Maa Idol - Front View",
-        src: "/umiya/umiya1.jpg",
+        title: "Umiya Maa Idol Decorated",
+        src: "/umiya/bguma.jpg",
         category: "Interior",
         description: "The divine idol of Maa Umiya adorned in traditional attire.",
         createdAt: /* @__PURE__ */ new Date()
@@ -96,14 +92,14 @@ var MemStorage = class {
       //   description: "Maa Umiya beautifully decorated during the festive season.",
       //   createdAt: new Date()
       // },
-      // {
-      //   id: "img-4",
-      //   title: "Divine Blessings",
-      //   src: "/umiya/umiya4.jpg",
-      //   category: "Interior",
-      //   description: "A closer glimpse of the goddess radiating divine energy.",
-      //   createdAt: new Date()
-      // },
+      {
+        id: "img-4",
+        title: "Divine Blessings",
+        src: "/umiya/mahadev.jpg",
+        category: "Interior",
+        description: "A closer glimpse of the goddess radiating divine energy.",
+        createdAt: /* @__PURE__ */ new Date()
+      },
       {
         id: "img-5",
         title: "Temple Aerial View",
@@ -154,28 +150,28 @@ var MemStorage = class {
       },
       {
         id: "img-11",
-        title: "Divine Setup",
+        title: "Radhe Krishna",
         src: "/umiya/umiyak11.jpg",
         category: "Interior",
-        description: "A beautiful altar setup featuring the goddess with devotion.",
+        description: "A beauty of radhe krishna .",
         createdAt: /* @__PURE__ */ new Date()
       },
       {
         id: "img-12",
-        title: "Umiya Maa Idol Decorated",
-        src: "/umiya/umiya12.jpg",
+        title: "Umiya Maa Idol - Front View ",
+        src: "/umiya/umiya13.jpg",
         category: "Festivals",
         description: "Maa Umiya beautifully decorated for a religious ceremony.",
         createdAt: /* @__PURE__ */ new Date()
-      },
-      {
-        id: "img-13",
-        title: "Sacred Idol in Sanctum",
-        src: "/umiya/umiya13.jpg",
-        category: "Interior",
-        description: "An image capturing the peaceful aura of the sanctum.",
-        createdAt: /* @__PURE__ */ new Date()
       }
+      // {
+      //   id: "img-13",
+      //   title: "Sacred Idol in Sanctum",
+      //   src: "/umiya/umiya13.jpg",
+      //   category: "Interior",
+      //   description: "An image capturing the peaceful aura of the sanctum.",
+      //   createdAt: new Date()
+      // },
     ];
     sampleEvents.forEach((event) => this.events.set(event.id, event));
     sampleGalleryImages.forEach((image) => this.galleryImages.set(image.id, image));
@@ -191,7 +187,11 @@ var MemStorage = class {
   }
   async createUser(insertUser) {
     const id = randomUUID();
-    const user = { ...insertUser, id };
+    const user = {
+      id,
+      username: insertUser.username,
+      password: insertUser.password
+    };
     this.users.set(id, user);
     return user;
   }
@@ -207,14 +207,27 @@ var MemStorage = class {
   async createEvent(insertEvent) {
     const id = randomUUID();
     const event = {
-      ...insertEvent,
+      // Required properties from Event type must be explicitly guaranteed
+      date: insertEvent.date || "",
+      // Provide default if missing
+      description: insertEvent.description || "",
+      title: insertEvent.title || "Untitled Event",
+      time: insertEvent.time || "TBD",
+      category: insertEvent.category || "General",
+      image: insertEvent.image || "/default/image.jpg",
+      // Properties that are present in both/handled separately
       id,
+      // The previous fix for 'unknown' type on attendees
       attendees: insertEvent.attendees ?? 0,
       createdAt: /* @__PURE__ */ new Date()
+      // Use spread for any other properties or to ensure all properties from 
+      // insertEvent are included, though explicitly listing the required ones is safer.
+      // ...insertEvent 
     };
     this.events.set(id, event);
     return event;
   }
+  // Corrected Code (No more error)
   async updateEvent(id, updateData) {
     const existingEvent = this.events.get(id);
     if (!existingEvent) return void 0;
@@ -240,9 +253,12 @@ var MemStorage = class {
   async createGalleryImage(insertImage) {
     const id = randomUUID();
     const image = {
-      ...insertImage,
       id,
-      createdAt: /* @__PURE__ */ new Date()
+      createdAt: /* @__PURE__ */ new Date(),
+      title: insertImage.title,
+      description: insertImage.description,
+      category: insertImage.category,
+      src: insertImage.src
     };
     this.galleryImages.set(id, image);
     return image;
@@ -261,28 +277,28 @@ var MemStorage = class {
     return this.galleryImages.delete(id);
   }
   // Contact Messages
-  async getAllContactMessages() {
-    return Array.from(this.contactMessages.values()).sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-    );
-  }
-  async getContactMessage(id) {
-    return this.contactMessages.get(id);
-  }
-  async createContactMessage(insertMessage) {
-    const id = randomUUID();
-    const message = {
-      ...insertMessage,
-      id,
-      phone: insertMessage.phone ?? null,
-      createdAt: /* @__PURE__ */ new Date()
-    };
-    this.contactMessages.set(id, message);
-    return message;
-  }
-  async deleteContactMessage(id) {
-    return this.contactMessages.delete(id);
-  }
+  // async getAllContactMessages(): Promise<ContactMessage[]> {
+  //   return Array.from(this.contactMessages.values()).sort((a, b) => 
+  //     b.createdAt!.getTime() - a.createdAt!.getTime()
+  //   );
+  // }
+  // async getContactMessage(id: string): Promise<ContactMessage | undefined> {
+  //   return this.contactMessages.get(id);
+  // }
+  // async createContactMessage(insertMessage: InsertContactMessage): Promise<ContactMessage> {
+  //   const id = randomUUID();
+  //   const message: ContactMessage = {
+  //     ...insertMessage,
+  //     id,
+  //     phone: insertMessage.phone ?? null,
+  //     createdAt: new Date()
+  //   };
+  //   this.contactMessages.set(id, message);
+  //   return message;
+  // }
+  // async deleteContactMessage(id: string): Promise<boolean> {
+  //   return this.contactMessages.delete(id);
+  // }
 };
 var storage = new MemStorage();
 
@@ -299,8 +315,6 @@ var events = pgTable("events", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   date: text("date").notNull(),
-  // startDate: text("start_date").notNull(),
-  // endDate: text("end_date"),
   time: text("time").notNull(),
   description: text("description").notNull(),
   category: text("category").notNull(),
@@ -456,49 +470,6 @@ async function registerRoutes(app2) {
       res.status(500).json({ error: "Failed to delete gallery image" });
     }
   });
-  app2.get("/api/contact-messages", async (req, res) => {
-    try {
-      const messages = await storage.getAllContactMessages();
-      res.json(messages);
-    } catch (error) {
-      console.error("Error fetching contact messages:", error);
-      res.status(500).json({ error: "Failed to fetch contact messages" });
-    }
-  });
-  app2.get("/api/contact-messages/:id", async (req, res) => {
-    try {
-      const message = await storage.getContactMessage(req.params.id);
-      if (!message) {
-        return res.status(404).json({ error: "Message not found" });
-      }
-      res.json(message);
-    } catch (error) {
-      console.error("Error fetching contact message:", error);
-      res.status(500).json({ error: "Failed to fetch contact message" });
-    }
-  });
-  app2.post("/api/contact-messages", async (req, res) => {
-    try {
-      const validatedData = insertContactMessageSchema.parse(req.body);
-      const message = await storage.createContactMessage(validatedData);
-      res.status(201).json(message);
-    } catch (error) {
-      console.error("Error creating contact message:", error);
-      res.status(400).json({ error: "Failed to create contact message" });
-    }
-  });
-  app2.delete("/api/contact-messages/:id", async (req, res) => {
-    try {
-      const success = await storage.deleteContactMessage(req.params.id);
-      if (!success) {
-        return res.status(404).json({ error: "Message not found" });
-      }
-      res.status(204).send();
-    } catch (error) {
-      console.error("Error deleting contact message:", error);
-      res.status(500).json({ error: "Failed to delete contact message" });
-    }
-  });
   const httpServer = createServer(app2);
   return httpServer;
 }
@@ -529,7 +500,7 @@ var vite_config_default = defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@": path.resolve(import.meta.dirname, "client/src"),
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets")
     }

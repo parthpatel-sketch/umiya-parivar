@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Heart, Users, Flower } from "lucide-react"
-import templeInteriorImage from "@assets/generated_images/Temple_interior_sanctum_d37f8a91.png"
+// import templeInteriorImage from "@assets/generated_images/Temple_interior_sanctum_d37f8a91.png"
 
 export function About() {
   return (
