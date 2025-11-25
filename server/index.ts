@@ -62,7 +62,7 @@ return (originalJson as any).call(this, body, ...args);
   server.listen(port, () => {
     console.log(`✅ Server running at http://localhost:${port}`);
   });
-})(); // <-- this was missing
+})(); 
 
 
 
