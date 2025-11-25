@@ -474,6 +474,9 @@ async function registerRoutes(app2) {
   return httpServer;
 }
 
+// server/index.ts
+import cors from "cors";
+
 // server/vite.ts
 import express from "express";
 import fs from "fs";
@@ -485,6 +488,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import "dotenv/config";
 var vite_config_default = defineConfig({
   plugins: [
     react(),
@@ -578,6 +582,16 @@ function serveStatic(app2) {
 
 // server/index.ts
 var app = express2();
+if (process.env.NODE_ENV === "development") {
+  app.use(cors());
+} else {
+  app.use(cors({
+    origin: process.env.FRONTEND_URL || "https://your-client.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+    // if you plan to use cookies/auth
+  }));
+}
 app.use(express2.json());
 app.use(express2.urlencoded({ extended: false }));
 app.use((req, res, next) => {
@@ -616,6 +630,10 @@ app.use((req, res, next) => {
   }
   const port = parseInt(process.env.PORT || "5000", 10);
   server.listen(port, () => {
-    console.log(`\u2705 Server running at http://localhost:${port}`);
+    if (process.env.NODE_ENV === "production") {
+      console.log(`\u{1F680} Server running in production on port ${port}`);
+    } else {
+      console.log(`\u2705 Server running at http://localhost:${port}`);
+    }
   });
 })();

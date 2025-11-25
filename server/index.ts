@@ -1,6 +1,7 @@
 import 'dotenv/config';  // loads .env automatically
 import express, { Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
+import cors from "cors";
 import { setupVite,serveStatic, log } from "./vite";
 declare global {
   namespace Express {
@@ -11,6 +12,22 @@ declare global {
 }
 
 const app = express();
+
+// -----------------
+// CORS Setup
+// -----------------
+if (process.env.NODE_ENV === "development") {
+  // Allow all origins in development
+  app.use(cors());
+} else {
+  // Allow only your Vercel frontend in production
+  app.use(cors({
+    origin: process.env.FRONTEND_URL || "https://your-client.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // if you plan to use cookies/auth
+  }));
+}
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -51,17 +68,24 @@ return (originalJson as any).call(this, body, ...args);
     const message = err.message || "Internal Server Error";
     res.status(status).json({ message });
   });
+if (process.env.NODE_ENV === "development") {
+  // Local: run Vite Dev + Server
+  await setupVite(app, server);
+} else {
+  // Production: serve the built frontend
+  serveStatic(app);
+}
 
-  if (process.env.NODE_ENV === "development") {
-    await setupVite(app,server);
+const port = parseInt(process.env.PORT || "5000", 10);
+
+server.listen(port, () => {
+  if (process.env.NODE_ENV === "production") {
+    console.log(`🚀 Server running in production on port ${port}`);
   } else {
-     serveStatic(app);
-  }
-
-  const port = parseInt(process.env.PORT || "5000", 10);
-  server.listen(port, () => {
     console.log(`✅ Server running at http://localhost:${port}`);
-  });
+  }
+});
+
 })(); 
 
 

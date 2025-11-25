@@ -1,12 +1,11 @@
-
-
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Eye, Filter } from "lucide-react"
-import { type GalleryImage } from "@shared/schema" 
+import { type GalleryImage } from "@shared/schema"
+import { getGallery } from "../lib/api"; 
 
 const categories = ["All", "Architecture", "Interior", "Events", "Festivals", "Community"]
 
@@ -14,9 +13,14 @@ export function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
 
-  const { data: galleryImages = [], isLoading } = useQuery<GalleryImage[]>({
-    queryKey: ["/api/gallery"],
-  })
+ const { data: galleryImages = [], isLoading, error } = useQuery<GalleryImage[]>({
+  queryKey: ["gallery"],
+  queryFn: getGallery,
+});
+
+if (isLoading) return <p>Loading gallery...</p>;
+if (error) return <p className="text-red-500">Failed to load gallery images.</p>;
+
 
   const filteredImages = selectedCategory === "All"
     ? galleryImages

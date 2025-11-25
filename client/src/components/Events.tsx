@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { type Event } from "@shared/schema";
+import { getEvents } from "../lib/api";
 
 // Map each event to its image
 const eventImages: Record<string, string> = {
@@ -11,10 +12,13 @@ const eventImages: Record<string, string> = {
   "Diwali Festival of Lights": "/umiya/mandir.jpg",
 };
 
+
 export function Events() {
-  const { data: upcomingEvents = [], isLoading } = useQuery<Event[]>({
-    queryKey: ["/api/events"],
-  });
+const { data: upcomingEvents = [], isLoading, error } = useQuery<Event[]>({
+  queryKey: ["events"],  // simpler
+  queryFn: getEvents,
+});
+
 
   if (isLoading) {
     return (

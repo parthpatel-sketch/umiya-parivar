@@ -64,6 +64,7 @@
   "include": [
     "server",
     "client/src",
-    "shared"
+    "shared",
+    "vite-env.d.ts"
   ]
 }
