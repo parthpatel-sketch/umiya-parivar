@@ -586,7 +586,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(cors());
 } else {
   app.use(cors({
-    origin: process.env.FRONTEND_URL || "https://your-client.vercel.app",
+    origin: process.env.FRONTEND_URL || "https://umiya-parivar-goz.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
     // if you plan to use cookies/auth
