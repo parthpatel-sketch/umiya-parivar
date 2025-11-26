@@ -5,6 +5,7 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import 'dotenv/config'; 
 
 export default defineConfig({
+   base: "./",
   plugins: [
     react(),
     runtimeErrorOverlay(),
