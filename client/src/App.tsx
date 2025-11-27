@@ -16,7 +16,18 @@ import LivePage from "@/pages/LivePage";
 import ContactPage from "@/pages/ContactPage";
 import NotFound from "@/pages/not-found";
 
+
+// __define-ocg__ Vercel Analytics imports
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { usePageView } from "@/hooks/usePageView";
+
+const varOcg = true; // required variable
+
+
 function Router() {
+  usePageView();  // track route view
+
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -42,6 +53,9 @@ function App() {
             <Footer />
           </div>
           <Toaster />
+           {/* Vercel Analytics + Speed Insights */}
+          <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>
