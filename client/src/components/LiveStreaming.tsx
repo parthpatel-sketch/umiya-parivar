@@ -46,6 +46,15 @@ export function LiveStreaming() {
   useEffect(() => {
     // NOTE: youtubeId must be the 11-character video ID only!
     const eventList: EventData[] = [
+            {
+  id: 0,
+  title: "🔴 LIVE શ્રી ઉમિયા માતાજી ભવ્ય નવચંડી યજ્ઞ || 11/11/2026 ગોજારીયા",
+  description: "શ્રી ઉમિયા માતાજી ભવ્ય નવચંડી યજ્ઞ",
+  start: "2026-11-11T09:30:00+05:30",
+  end: "2026-11-11T22:44:00+05:30",
+  youtubeId: "caOHkPNDduc"
+},
+     
       {
         id: 1,
         title: "🔴 LIVE || DAY 1 || શતચંડી મહાયજ્ઞ || શ્રી ઉમિયા માતાજી મંદિર || ગોઝારીયા",
